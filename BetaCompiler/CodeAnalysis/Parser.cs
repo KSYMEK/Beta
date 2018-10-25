@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 namespace Beta.CodeAnalysis {
-    class Parser {
+    internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private List<string> _diagnostics = new List<string>();
         private int _position;
@@ -25,7 +25,7 @@ namespace Beta.CodeAnalysis {
 
         public SyntaxTree Parse () {
             var expression = ParseTerm();
-            var endOfFileToken = Match(SyntaxKind.EndOfFileToken);
+            var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
         }
 
@@ -69,7 +69,7 @@ namespace Beta.CodeAnalysis {
             _position++;
             return current;
         }
-        private SyntaxToken Match (SyntaxKind kind) {
+        private SyntaxToken MatchToken (SyntaxKind kind) {
             if (Current.Kind == kind)
                 return NextToken();
             
@@ -80,11 +80,11 @@ namespace Beta.CodeAnalysis {
             if (Current.Kind == SyntaxKind.OpenParenthesisToken) {
                 var left = NextToken();
                 var expression = ParseExpression();
-                var right = Match(SyntaxKind.CloseParenthesisToken);
+                var right = MatchToken(SyntaxKind.CloseParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left, expression, right);
             }
-            var numberToken = Match(SyntaxKind.NumberToken);
-            return new NumberExpressionSyntax(numberToken);
+            var numberToken = MatchToken(SyntaxKind.NumberToken);
+            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }

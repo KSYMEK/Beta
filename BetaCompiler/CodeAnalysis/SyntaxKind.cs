@@ -1,5 +1,8 @@
 namespace Beta.CodeAnalysis {
-    enum SyntaxKind {
+    public enum SyntaxKind {
+        // Tokens      
+        BadToken,
+        EndOfFileToken,
         NumberToken,
         WhitespaceToken,
         PlusToken,
@@ -8,8 +11,8 @@ namespace Beta.CodeAnalysis {
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
-        BadToken,
-        EndOfFileToken,
+
+        // Expressions
         NumberExpression,
         BinaryExpression,
         ParenthesizedExpression

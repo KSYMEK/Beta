@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beta", "BetaCompiler\Beta.csproj", "{FB88B02C-57AE-4306-8813-B58A00221B69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetaCompiler", "BetaCompiler\BetaCompiler.csproj", "{FB88B02C-57AE-4306-8813-B58A00221B69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

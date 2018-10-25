@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Beta.CodeAnalysis {
-    sealed class SyntaxTree {
+    public sealed class SyntaxTree {
         public SyntaxTree (IReadOnlyList<string> diagnostic, ExpressionSyntax root, SyntaxToken endOfFileToken)
         {
             Diagnostics = diagnostic.ToArray();

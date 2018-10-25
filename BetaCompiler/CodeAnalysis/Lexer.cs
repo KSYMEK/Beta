@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Beta.CodeAnalysis
 {
-    class Lexer {
+    internal sealed class Lexer {
         private readonly string _text;
         private int _position;
         private List<string> _diagnostics = new List<string>();

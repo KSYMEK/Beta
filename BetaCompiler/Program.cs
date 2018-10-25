@@ -4,9 +4,9 @@ using System.Linq;
 using Beta.CodeAnalysis;
 
 namespace Beta {
-    class Program {
-        static void Main (string[] args) {
-            bool showTree = false;
+    internal static class Program {
+        private static void Main () {
+            var showTree = false;
             while (true) {
                 Console.Write("> ");
                 var line = Console.ReadLine();
@@ -27,10 +27,9 @@ namespace Beta {
                 var syntaxTree = SyntaxTree.Parse(line);
 
                 if (showTree) {
-                    var color = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     PrettyPrint(syntaxTree.Root);
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
                 
                 if (!syntaxTree.Diagnostics.Any()) {
@@ -38,12 +37,11 @@ namespace Beta {
                     var result = evaluator.Evaluate();
                     Console.WriteLine(result);
                 } else {   
-                    var color = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     foreach (var diagnostic in syntaxTree.Diagnostics) {
                         Console.WriteLine(diagnostic);
                     }
-                    Console.ForegroundColor = color;
+                    Console.ResetColor();
                 }
             }
         }
