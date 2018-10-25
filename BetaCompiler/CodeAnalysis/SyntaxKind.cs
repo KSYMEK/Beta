@@ -13,7 +13,7 @@ namespace Beta.CodeAnalysis {
         CloseParenthesisToken,
 
         // Expressions
-        NumberExpression,
+        LiteralExpression,
         BinaryExpression,
         ParenthesizedExpression
     }
