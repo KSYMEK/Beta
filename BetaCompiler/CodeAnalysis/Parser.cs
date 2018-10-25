@@ -12,7 +12,7 @@ namespace Beta.CodeAnalysis {
             SyntaxToken token;
 
             do {
-                token = lexer.NextToken();
+                token = lexer.Lex();
                 if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind != SyntaxKind.BadToken)
                     tokens.Add(token);
             } while (token.Kind != SyntaxKind.EndOfFileToken);
