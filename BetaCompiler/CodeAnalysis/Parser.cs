@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
-namespace Beta.CodeAnalysis {
+namespace Beta.CodeAnalysis
+{
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private List<string> _diagnostics = new List<string>();
@@ -33,7 +34,7 @@ namespace Beta.CodeAnalysis {
             var left = ParsePrimaryExpression();
 
             while (true) {
-                var precedese = GetBinaryOperatorPrecedence(Current.Kind);
+                var precedese = Current.Kind.GetBinaryOperatorPrecedence();
                 if (precedese == 0 || precedese <= parentPrecedense)
                     break;
 
@@ -43,22 +44,6 @@ namespace Beta.CodeAnalysis {
             }
 
             return left;
-        }
-
-        private static int GetBinaryOperatorPrecedence(SyntaxKind kind) {
-            // The highest precedence means more importance for action
-            switch (kind) {
-                case SyntaxKind.StarToken:
-                case SyntaxKind.SlashToken:
-                    return 2;
-
-                case SyntaxKind.PlusToken:
-                case SyntaxKind.MinusToken:
-                    return 1;
-
-                default:
-                    return 0;
-            }
         }
 
         private SyntaxToken Peek (int offset) {
