@@ -24,38 +24,43 @@ namespace Beta.CodeAnalysis {
         public IEnumerable<string> Diagnostics => _diagnostics;
 
         public SyntaxTree Parse () {
-            var expression = ParseTerm();
+            var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
         }
 
-        private ExpressionSyntax ParseExpression () {
-            return ParseTerm();
-        }
-        private ExpressionSyntax ParseTerm () {
-            var left = ParseFactor();
-
-            while (Current.Kind == SyntaxKind.PlusToken ||
-                   Current.Kind == SyntaxKind.MinusToken) {
-                var operatorToken = NextToken();
-                var right = ParseFactor();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
-
-            return left;
-        }
-        private ExpressionSyntax ParseFactor () {
+        private ExpressionSyntax ParseExpression(int parentPrecedense = 0) {
             var left = ParsePrimaryExpression();
 
-            while (Current.Kind == SyntaxKind.StarToken ||
-                   Current.Kind == SyntaxKind.SlashToken) {
+            while (true) {
+                var precedese = GetBinaryOperatorPrecedence(Current.Kind);
+                if (precedese == 0 || precedese <= parentPrecedense)
+                    break;
+
                 var operatorToken = NextToken();
-                var right = ParsePrimaryExpression();
+                var right = ParseExpression(precedese);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
 
             return left;
         }
+
+        private static int GetBinaryOperatorPrecedence(SyntaxKind kind) {
+            // The highest precedence means more importance for action
+            switch (kind) {
+                case SyntaxKind.StarToken:
+                case SyntaxKind.SlashToken:
+                    return 2;
+
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    return 1;
+
+                default:
+                    return 0;
+            }
+        }
+
         private SyntaxToken Peek (int offset) {
             var index = _position + offset;
             if (index >= _tokens.Length)
@@ -63,12 +68,15 @@ namespace Beta.CodeAnalysis {
 
             return _tokens[index];
         }
+
         private SyntaxToken Current => Peek(0);
+
         private SyntaxToken NextToken () {
             var current = Current;
             _position++;
             return current;
         }
+
         private SyntaxToken MatchToken (SyntaxKind kind) {
             if (Current.Kind == kind)
                 return NextToken();
@@ -76,6 +84,7 @@ namespace Beta.CodeAnalysis {
             _diagnostics.Add($"ERROR: Unexpected token <{Current.Kind}>, expected <{kind}>");
             return new SyntaxToken(kind, Current.Position, null, null);
         }
+
         private ExpressionSyntax ParsePrimaryExpression () {
             if (Current.Kind == SyntaxKind.OpenParenthesisToken) {
                 var left = NextToken();
