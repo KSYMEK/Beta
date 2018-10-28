@@ -31,7 +31,16 @@ namespace Beta.CodeAnalysis
         }
 
         private ExpressionSyntax ParseExpression(int parentPrecedense = 0) {
-            var left = ParsePrimaryExpression();
+            ExpressionSyntax left;
+            var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+            
+            if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedense) {
+                var operatorToken = NextToken();
+                var operand = ParseExpression(unaryOperatorPrecedence);
+                left = new UnaryExpressionSyntax(operatorToken, operand);
+            } else {
+                left = ParsePrimaryExpression();
+            }
 
             while (true) {
                 var precedese = Current.Kind.GetBinaryOperatorPrecedence();
