@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Beta.CodeAnalysis;
+using Beta.CodeAnalysis.Binding;
 using Beta.CodeAnalysis.Syntax;
 
 namespace Beta {
@@ -25,6 +27,9 @@ namespace Beta {
                 }
 
                 var syntaxTree = SyntaxTree.Parse(line);
+                var binder = new Binder();
+                var boundExpression = binder.BindExpression(syntaxTree.Root);
+                var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();
 
                 if (showTree) {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -33,12 +38,12 @@ namespace Beta {
                 }
                 
                 if (!syntaxTree.Diagnostics.Any()) {
-                    var evaluator = new Evaluator(syntaxTree.Root);
+                    var evaluator = new Evaluator(boundExpression);
                     var result = evaluator.Evaluate();
                     Console.WriteLine(result);
                 } else {   
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    foreach (var diagnostic in syntaxTree.Diagnostics) {
+                    foreach (var diagnostic in diagnostics) {
                         Console.WriteLine(diagnostic);
                     }
                     Console.ResetColor();
