@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Beta.CodeAnalysis {
+namespace Beta.CodeAnalysis.Syntax {
     public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax {
         public ParenthesizedExpressionSyntax(SyntaxToken openParenthesisToken, ExpressionSyntax expression, SyntaxToken closeParenthesisToken) {
             OpenParenthesisToken = openParenthesisToken;

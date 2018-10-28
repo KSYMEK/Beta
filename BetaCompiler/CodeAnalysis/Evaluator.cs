@@ -1,4 +1,5 @@
 using System;
+using Beta.CodeAnalysis.Syntax;
 
 namespace Beta.CodeAnalysis
 {

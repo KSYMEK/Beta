@@ -1,4 +1,4 @@
-namespace Beta.CodeAnalysis {
+namespace Beta.CodeAnalysis.Syntax {
     public enum SyntaxKind {
         // Tokens      
         BadToken,

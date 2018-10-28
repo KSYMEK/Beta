@@ -1,5 +1,4 @@
-namespace Beta.CodeAnalysis
-{
+namespace Beta.CodeAnalysis.Syntax {
     public static class SyntaxFacts {
         public static int GetUnaryOperatorPrecedence(this SyntaxKind kind) {
             // The highest precedence means action is more important

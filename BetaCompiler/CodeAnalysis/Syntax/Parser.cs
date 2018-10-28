@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 
-namespace Beta.CodeAnalysis
-{
+namespace Beta.CodeAnalysis.Syntax {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private List<string> _diagnostics = new List<string>();

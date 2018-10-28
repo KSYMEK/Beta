@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 
-namespace Beta.CodeAnalysis
-{
+namespace Beta.CodeAnalysis.Syntax {
     public sealed class LiteralExpressionSyntax : ExpressionSyntax {
         public LiteralExpressionSyntax (SyntaxToken literalToken)
         {
