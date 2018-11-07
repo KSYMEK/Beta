@@ -3,6 +3,8 @@ namespace Beta.CodeAnalysis.Binding {
         Addition,
         Subtraction,
         Multiplication,
-        Division
+        Division,
+        LogicalAnd,
+        LogicalOr
     }
 }

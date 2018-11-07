@@ -37,7 +37,7 @@ namespace Beta {
                     Console.ResetColor();
                 }
                 
-                if (!syntaxTree.Diagnostics.Any()) {
+                if (!diagnostics.Any()) {
                     var evaluator = new Evaluator(boundExpression);
                     var result = evaluator.Evaluate();
                     Console.WriteLine(result);

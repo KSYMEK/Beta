@@ -11,11 +11,19 @@ namespace Beta.CodeAnalysis.Syntax {
         SlashToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
+        IdentifierToken,
+        BangToken,  
+        AmpersandAmpersandToken,
+        PipePipeToken,
 
         // Expressions
         LiteralExpression,
         BinaryExpression,
         ParenthesizedExpression,
-        UnaryExpression
+        UnaryExpression,
+
+        // Keywords
+        TrueKeyword,
+        FalseKeyword
     }
 }
