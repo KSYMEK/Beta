@@ -15,6 +15,8 @@ namespace Beta.CodeAnalysis.Syntax {
         BangToken,  
         AmpersandAmpersandToken,
         PipePipeToken,
+        EqualsEqualsToken,
+        BangEqualsToken,
 
         // Expressions
         LiteralExpression,
