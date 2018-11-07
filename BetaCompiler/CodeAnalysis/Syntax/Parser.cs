@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Beta.CodeAnalysis {
+namespace Beta.CodeAnalysis.Syntax {
     internal sealed class Parser {
         private readonly SyntaxToken[] _tokens;
         private List<string> _diagnostics = new List<string>();
@@ -12,7 +12,7 @@ namespace Beta.CodeAnalysis {
             SyntaxToken token;
 
             do {
-                token = lexer.NextToken();
+                token = lexer.Lex();
                 if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind != SyntaxKind.BadToken)
                     tokens.Add(token);
             } while (token.Kind != SyntaxKind.EndOfFileToken);
@@ -24,38 +24,36 @@ namespace Beta.CodeAnalysis {
         public IEnumerable<string> Diagnostics => _diagnostics;
 
         public SyntaxTree Parse () {
-            var expression = ParseTerm();
+            var expression = ParseExpression();
             var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics, expression, endOfFileToken);
         }
 
-        private ExpressionSyntax ParseExpression () {
-            return ParseTerm();
-        }
-        private ExpressionSyntax ParseTerm () {
-            var left = ParseFactor();
-
-            while (Current.Kind == SyntaxKind.PlusToken ||
-                   Current.Kind == SyntaxKind.MinusToken) {
+        private ExpressionSyntax ParseExpression(int parentPrecedense = 0) {
+            ExpressionSyntax left;
+            var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+            
+            if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedense) {
                 var operatorToken = NextToken();
-                var right = ParseFactor();
+                var operand = ParseExpression(unaryOperatorPrecedence);
+                left = new UnaryExpressionSyntax(operatorToken, operand);
+            } else {
+                left = ParsePrimaryExpression();
+            }
+
+            while (true) {
+                var precedese = Current.Kind.GetBinaryOperatorPrecedence();
+                if (precedese == 0 || precedese <= parentPrecedense)
+                    break;
+
+                var operatorToken = NextToken();
+                var right = ParseExpression(precedese);
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
 
             return left;
         }
-        private ExpressionSyntax ParseFactor () {
-            var left = ParsePrimaryExpression();
 
-            while (Current.Kind == SyntaxKind.StarToken ||
-                   Current.Kind == SyntaxKind.SlashToken) {
-                var operatorToken = NextToken();
-                var right = ParsePrimaryExpression();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
-
-            return left;
-        }
         private SyntaxToken Peek (int offset) {
             var index = _position + offset;
             if (index >= _tokens.Length)
@@ -63,12 +61,15 @@ namespace Beta.CodeAnalysis {
 
             return _tokens[index];
         }
-        private SyntaxToken Current => Peek(0);
+
+        private SyntaxToken Current => Peek (0);
+
         private SyntaxToken NextToken () {
             var current = Current;
             _position++;
             return current;
         }
+
         private SyntaxToken MatchToken (SyntaxKind kind) {
             if (Current.Kind == kind)
                 return NextToken();
@@ -76,15 +77,29 @@ namespace Beta.CodeAnalysis {
             _diagnostics.Add($"ERROR: Unexpected token <{Current.Kind}>, expected <{kind}>");
             return new SyntaxToken(kind, Current.Position, null, null);
         }
+
         private ExpressionSyntax ParsePrimaryExpression () {
-            if (Current.Kind == SyntaxKind.OpenParenthesisToken) {
-                var left = NextToken();
-                var expression = ParseExpression();
-                var right = MatchToken(SyntaxKind.CloseParenthesisToken);
-                return new ParenthesizedExpressionSyntax(left, expression, right);
-            }
-            var numberToken = MatchToken(SyntaxKind.NumberToken);
-            return new LiteralExpressionSyntax(numberToken);
+            switch (Current.Kind)
+            {
+                case SyntaxKind.OpenParenthesisToken: {
+                    var left = NextToken();
+                    var expression = ParseExpression();
+                    var right = MatchToken(SyntaxKind.CloseParenthesisToken);
+                    return new ParenthesizedExpressionSyntax(left, expression, right);
+                }
+
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword: {
+                    var keywordToken = NextToken();
+                    var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
+                    return new LiteralExpressionSyntax(keywordToken, value);
+                }
+
+                default: {
+                    var numberToken = MatchToken(SyntaxKind.NumberToken);
+                    return new LiteralExpressionSyntax(numberToken);
+                }
+            } 
         }
     }
 }

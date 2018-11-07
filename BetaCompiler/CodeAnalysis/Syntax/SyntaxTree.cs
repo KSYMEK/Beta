@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Beta.CodeAnalysis {
+namespace Beta.CodeAnalysis.Syntax {
     public sealed class SyntaxTree {
         public SyntaxTree (IReadOnlyList<string> diagnostic, ExpressionSyntax root, SyntaxToken endOfFileToken)
         {
