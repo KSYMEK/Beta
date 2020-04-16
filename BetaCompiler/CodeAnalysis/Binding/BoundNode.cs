@@ -1,5 +1,5 @@
-namespace Beta.CodeAnalysis.Binding {
-    internal abstract class BoundNode {
-        public abstract BoundNodeKind Kind { get; }
-    }
+namespace BetaCompiler.CodeAnalysis.Binding {
+	internal abstract class BoundNode {
+		public abstract BoundNodeKind Kind { get; }
+	}
 }

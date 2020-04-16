@@ -1,7 +1,7 @@
-namespace Beta.CodeAnalysis.Binding {
-    internal enum BoundUnaryOperatorKind {
-        Identity,
-        Negation,
-        LogicalNegation
-    }
+namespace BetaCompiler.CodeAnalysis.Binding {
+	internal enum BoundUnaryOperatorKind {
+		Identity,
+		Negation,
+		LogicalNegation
+	}
 }

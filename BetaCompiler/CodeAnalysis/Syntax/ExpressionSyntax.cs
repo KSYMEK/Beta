@@ -1,5 +1,4 @@
-namespace Beta.CodeAnalysis.Syntax {
-    public abstract class ExpressionSyntax : SyntaxNode {
-
-    }
+namespace BetaCompiler.CodeAnalysis.Syntax {
+	public abstract class ExpressionSyntax : SyntaxNode {
+	}
 }

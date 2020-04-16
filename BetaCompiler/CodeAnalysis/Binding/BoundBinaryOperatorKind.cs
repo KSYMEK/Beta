@@ -1,12 +1,12 @@
-namespace Beta.CodeAnalysis.Binding {
-    internal enum BoundBinaryOperatorKind {
-        Addition,
-        Subtraction,
-        Multiplication,
-        Division,
-        LogicalAnd,
-        LogicalOr,
-        Equals,
-        NotEquals
-    }
+namespace BetaCompiler.CodeAnalysis.Binding {
+	internal enum BoundBinaryOperatorKind {
+		Addition,
+		Subtraction,
+		Multiplication,
+		Division,
+		LogicalAnd,
+		LogicalOr,
+		Equals,
+		NotEquals
+	}
 }

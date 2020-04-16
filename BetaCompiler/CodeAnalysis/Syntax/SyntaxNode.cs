@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Beta.CodeAnalysis.Syntax {
-    public abstract class SyntaxNode {
-        public abstract SyntaxKind Kind { get; }
-        public abstract IEnumerable<SyntaxNode> GetChildren();
-    }
+namespace BetaCompiler.CodeAnalysis.Syntax {
+	public abstract class SyntaxNode {
+		public abstract SyntaxKind Kind { get; }
+		public abstract IEnumerable<SyntaxNode> GetChildren();
+	}
 }
